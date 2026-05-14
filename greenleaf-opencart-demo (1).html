@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GreenLeaf Garden Supplies - OpenCart Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --green: #1a3a6b;
+    --green-dark: #0d1f3c;
+    --green-light: #2a5298;
+    --yellow: #00aaff;
+    --gray: #f0f2f5;
+    --dark: #111;
+    --mid: #555;
+    --border: #ddd;
+  }
+  body { font-family: 'Lato', sans-serif; color: var(--dark); background: #fff; }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--green-dark);
+    color: #fff;
+    font-size: 12px;
+    padding: 6px 0;
+  }
+  .topbar .inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .topbar a { color: #cde8aa; text-decoration: none; margin-left: 14px; }
+  .topbar a:hover { color: #fff; }
+
+  /* HEADER */
+  header {
+    background: #fff;
+    border-bottom: 3px solid var(--green);
+    padding: 14px 0;
+  }
+  header .inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 48px; height: 48px;
+    background: var(--green);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+  .logo-text { line-height: 1.1; }
+  .logo-text strong { display: block; font-family: 'Merriweather', serif; font-size: 20px; color: var(--green-dark); }
+  .logo-text span { font-size: 11px; color: var(--mid); letter-spacing: 1px; text-transform: uppercase; }
+
+  .search-bar {
+    flex: 1;
+    display: flex;
+    border: 2px solid var(--green);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .search-bar select {
+    border: none; border-right: 1px solid var(--border);
+    padding: 0 10px; font-size: 13px; background: var(--gray); color: var(--mid);
+    outline: none; cursor: pointer;
+  }
+  .search-bar input {
+    flex: 1; border: none; padding: 10px 14px; font-size: 14px; outline: none;
+  }
+  .search-bar button {
+    background: var(--green); border: none; color: #fff;
+    padding: 0 18px; font-size: 16px; cursor: pointer;
+  }
+  .search-bar button:hover { background: var(--green-dark); }
+
+  .header-right {
+    display: flex; gap: 20px; align-items: center;
+  }
+  .header-right a {
+    text-decoration: none; color: var(--dark); font-size: 13px;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .header-right a .icon { font-size: 20px; }
+  .cart-btn {
+    background: var(--yellow); border-radius: 4px;
+    padding: 8px 14px; font-weight: 700; color: var(--dark) !important;
+    position: relative;
+  }
+  .cart-count {
+    position: absolute; top: -6px; right: -6px;
+    background: var(--green); color: #fff;
+    font-size: 10px; width: 18px; height: 18px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--green);
+  }
+  nav .inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 20px;
+    display: flex; align-items: center;
+  }
+  nav a {
+    color: #fff; text-decoration: none; padding: 13px 16px;
+    font-size: 14px; font-weight: 700; display: block;
+    transition: background 0.2s;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  nav a:hover, nav a.active { background: var(--green-dark); }
+  nav .dropdown { position: relative; }
+  nav .dropdown:hover .drop-menu { display: block; }
+  .drop-menu {
+    display: none; position: absolute; top: 100%; left: 0;
+    background: #fff; min-width: 200px; z-index: 100;
+    border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .drop-menu a {
+    color: var(--dark); padding: 10px 16px; font-weight: 400;
+    border-bottom: 1px solid var(--border); text-transform: none; letter-spacing: 0;
+  }
+  .drop-menu a:hover { background: var(--gray); color: var(--green); }
+
+  /* HERO */
+  .hero {
+    max-width: 1200px; margin: 20px auto; padding: 0 20px;
+    display: grid; grid-template-columns: 1fr 240px; gap: 16px;
+  }
+  .hero-banner {
+    background: linear-gradient(135deg, #000000 0%, #0d1f3c 60%, #1a3a6b 100%);
+    border-radius: 6px; padding: 40px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: relative; overflow: hidden; min-height: 280px;
+  }
+  .hero-banner::after {
+    content: '🌿';
+    position: absolute; right: -20px; bottom: -20px;
+    font-size: 180px; opacity: 0.08;
+  }
+  .hero-text { color: #fff; }
+  .hero-text .tag {
+    background: var(--yellow); color: var(--dark);
+    font-size: 11px; font-weight: 900; padding: 4px 10px;
+    border-radius: 2px; text-transform: uppercase; letter-spacing: 1px;
+    display: inline-block; margin-bottom: 14px;
+  }
+  .hero-text h1 {
+    font-family: 'Merriweather', serif;
+    font-size: 32px; line-height: 1.2; margin-bottom: 10px;
+  }
+  .hero-text p { font-size: 15px; opacity: 0.9; margin-bottom: 20px; }
+  .hero-text .btn {
+    background: var(--yellow); color: var(--dark);
+    padding: 12px 28px; border-radius: 4px; font-weight: 900;
+    font-size: 15px; text-decoration: none; display: inline-block;
+    transition: transform 0.2s;
+  }
+  .hero-text .btn:hover { transform: translateY(-2px); }
+  .hero-img { font-size: 120px; z-index: 1; }
+
+  .hero-side { display: flex; flex-direction: column; gap: 16px; }
+  .side-banner {
+    border-radius: 6px; padding: 20px;
+    display: flex; flex-direction: column; justify-content: center;
+    min-height: 130px; text-decoration: none; transition: opacity 0.2s;
+  }
+  .side-banner:hover { opacity: 0.92; }
+  .side-banner.delivery { background: #0d1f3c; color: #fff; }
+  .side-banner.offer { background: #1a3a6b; color: #fff; }
+  .side-banner .icon { font-size: 28px; margin-bottom: 6px; }
+  .side-banner strong { display: block; font-size: 17px; font-weight: 900; margin-bottom: 4px; }
+  .side-banner span { font-size: 12px; opacity: 0.85; }
+
+  /* TABS */
+  .tabs-section {
+    max-width: 1200px; margin: 30px auto; padding: 0 20px;
+  }
+  .tabs-header {
+    display: flex; border-bottom: 2px solid var(--green);
+    margin-bottom: 20px;
+  }
+  .tab {
+    padding: 10px 22px; font-size: 14px; font-weight: 700;
+    cursor: pointer; border: 2px solid transparent;
+    border-bottom: none; margin-bottom: -2px; border-radius: 4px 4px 0 0;
+    color: var(--mid); background: var(--gray);
+    transition: all 0.2s;
+  }
+  .tab.active {
+    background: #fff; border-color: var(--green);
+    color: var(--green-dark);
+  }
+  .tab:hover:not(.active) { background: #e8f5d8; color: var(--green); }
+
+  /* PRODUCTS */
+  .products-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+  }
+  .product-card {
+    border: 1px solid var(--border); border-radius: 6px;
+    overflow: hidden; transition: box-shadow 0.2s, transform 0.2s;
+    background: #fff;
+  }
+  .product-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.1); transform: translateY(-3px); }
+  .product-img {
+    height: 160px; display: flex; align-items: center; justify-content: center;
+    font-size: 70px; background: var(--gray);
+    position: relative;
+  }
+  .badge {
+    position: absolute; top: 10px; left: 10px;
+    background: var(--green); color: #fff;
+    font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .badge.sale { background: #e74c3c; }
+  .product-info { padding: 14px; }
+  .product-info h3 { font-size: 14px; margin-bottom: 6px; line-height: 1.3; color: var(--dark); }
+  .stars { color: var(--yellow); font-size: 12px; margin-bottom: 6px; }
+  .stars span { color: var(--mid); }
+  .price { font-size: 18px; font-weight: 900; color: var(--green-dark); }
+  .price .old { font-size: 13px; color: #999; text-decoration: line-through; margin-left: 6px; font-weight: 400; }
+  .add-cart {
+    display: block; width: 100%; margin-top: 10px;
+    background: var(--green); color: #fff; border: none;
+    padding: 9px; border-radius: 4px; font-size: 13px; font-weight: 700;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .add-cart:hover { background: var(--green-dark); }
+
+  /* FEATURES */
+  .features {
+    background: var(--gray); margin: 30px 0; padding: 30px 0;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .features .inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 20px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+  }
+  .feature { display: flex; align-items: center; gap: 14px; }
+  .feature .icon { font-size: 32px; }
+  .feature strong { display: block; font-size: 14px; margin-bottom: 2px; }
+  .feature span { font-size: 12px; color: var(--mid); }
+
+  /* FOOTER */
+  footer {
+    background: #0d1f3c; color: #a0b8d8; padding: 40px 0 20px;
+  }
+  footer .inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 20px;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 30px;
+    margin-bottom: 30px;
+  }
+  footer h4 { color: #fff; font-size: 14px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; }
+  footer p { font-size: 13px; line-height: 1.6; }
+  footer ul { list-style: none; }
+  footer ul li { margin-bottom: 8px; }
+  footer ul li a { color: #a0b8d8; text-decoration: none; font-size: 13px; }
+  footer ul li a:hover { color: #fff; }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 16px;
+    max-width: 1200px; margin: 0 auto; padding: 16px 20px 0;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px;
+  }
+  .powered { color: rgba(255,255,255,0.4); font-size: 11px; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="inner">
+    <span>📞 01234 567890 &nbsp;|&nbsp; ✉️ info@greenleafgardens.co.uk</span>
+    <div>
+      <a href="#">My Account</a>
+      <a href="#">Wishlist</a>
+      <a href="#">Order Tracking</a>
+      <a href="#">Login / Register</a>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="inner">
+    <a class="logo" href="#">
+      <div class="logo-icon">🌿</div>
+      <div class="logo-text">
+        <strong>GreenLeaf</strong>
+        <span>Garden Supplies</span>
+      </div>
+    </a>
+    <div class="search-bar">
+      <select>
+        <option>All Categories</option>
+        <option>Lawn Mowers</option>
+        <option>Hand Tools</option>
+        <option>Seeds & Plants</option>
+        <option>Outdoor Furniture</option>
+        <option>Irrigation</option>
+      </select>
+      <input type="text" placeholder="Search for products...">
+      <button>🔍</button>
+    </div>
+    <div class="header-right">
+      <a href="#"><span class="icon">👤</span>Account</a>
+      <a href="#"><span class="icon">❤️</span>Wishlist</a>
+      <a href="#" class="cart-btn">
+        <span class="icon">🛒</span>Cart
+        <span class="cart-count">3</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <div class="inner">
+    <a href="#" class="active">Home</a>
+    <div class="dropdown">
+      <a href="#">Lawn Care ▾</a>
+      <div class="drop-menu">
+        <a href="#">Lawn Mowers</a>
+        <a href="#">Lawn Feed & Seed</a>
+        <a href="#">Edgers & Trimmers</a>
+        <a href="#">Scarifiers</a>
+      </div>
+    </div>
+    <div class="dropdown">
+      <a href="#">Hand Tools ▾</a>
+      <div class="drop-menu">
+        <a href="#">Spades & Forks</a>
+        <a href="#">Pruning & Cutting</a>
+        <a href="#">Rakes & Hoes</a>
+      </div>
+    </div>
+    <a href="#">Seeds & Plants</a>
+    <a href="#">Irrigation</a>
+    <a href="#">Outdoor Furniture</a>
+    <a href="#">Offers</a>
+    <a href="#">Contact Us</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-banner">
+    <div class="hero-text">
+      <span class="tag">Summer Sale — Up to 40% Off</span>
+      <h1>Everything Your Garden Needs</h1>
+      <p>Premium tools, seeds, and equipment delivered to your door.</p>
+      <a href="#" class="btn">Shop Now →</a>
+    </div>
+    <div class="hero-img">🌱</div>
+  </div>
+  <div class="hero-side">
+    <a href="#" class="side-banner delivery">
+      <div class="icon">🚚</div>
+      <strong>Free Delivery</strong>
+      <span>On orders over £50 across the UK</span>
+    </a>
+    <a href="#" class="side-banner offer">
+      <div class="icon">🔧</div>
+      <strong>Click & Collect</strong>
+      <span>Ready in-store within 2 hours</span>
+    </a>
+  </div>
+</div>
+
+<!-- PRODUCTS TABS -->
+<div class="tabs-section">
+  <div class="tabs-header">
+    <div class="tab active">Featured Products</div>
+    <div class="tab">Best Sellers</div>
+    <div class="tab">New Arrivals</div>
+    <div class="tab">On Sale</div>
+    <div class="tab">Clearance</div>
+  </div>
+  <div class="products-grid">
+    <div class="product-card">
+      <div class="product-img">🌿<span class="badge">Featured</span></div>
+      <div class="product-info">
+        <h3>Professional Garden Spade — Stainless Steel</h3>
+        <div class="stars">★★★★★ <span>(42)</span></div>
+        <div class="price">£29.99</div>
+        <button class="add-cart">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">🌻<span class="badge sale">Sale</span></div>
+      <div class="product-info">
+        <h3>Sunflower Seed Mix — 500g Garden Pack</h3>
+        <div class="stars">★★★★☆ <span>(28)</span></div>
+        <div class="price">£8.49 <span class="old">£12.99</span></div>
+        <button class="add-cart">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">🌱<span class="badge">Featured</span></div>
+      <div class="product-info">
+        <h3>Drip Irrigation Kit — 25m Coverage</h3>
+        <div class="stars">★★★★★ <span>(67)</span></div>
+        <div class="price">£44.99</div>
+        <button class="add-cart">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">🪴<span class="badge sale">Sale</span></div>
+      <div class="product-info">
+        <h3>Raised Garden Bed — Pine Wood 120x60cm</h3>
+        <div class="stars">★★★★☆ <span>(19)</span></div>
+        <div class="price">£54.99 <span class="old">£79.99</span></div>
+        <button class="add-cart">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="features">
+  <div class="inner">
+    <div class="feature">
+      <div class="icon">🚚</div>
+      <div><strong>Free UK Delivery</strong><span>On all orders over £50</span></div>
+    </div>
+    <div class="feature">
+      <div class="icon">↩️</div>
+      <div><strong>30-Day Returns</strong><span>Hassle-free returns policy</span></div>
+    </div>
+    <div class="feature">
+      <div class="icon">🔒</div>
+      <div><strong>Secure Payment</strong><span>SSL encrypted checkout</span></div>
+    </div>
+    <div class="feature">
+      <div class="icon">📞</div>
+      <div><strong>Expert Support</strong><span>Mon–Sat 9am–5pm</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="inner">
+    <div>
+      <h4>GreenLeaf Gardens</h4>
+      <p>Your trusted supplier of premium garden tools, seeds, and outdoor equipment since 2009. Proudly serving gardeners across the UK.</p>
+    </div>
+    <div>
+      <h4>Information</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Delivery Info</a></li>
+        <li><a href="#">Returns Policy</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms & Conditions</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>My Account</h4>
+      <ul>
+        <li><a href="#">Login</a></li>
+        <li><a href="#">Register</a></li>
+        <li><a href="#">Order History</a></li>
+        <li><a href="#">Wishlist</a></li>
+        <li><a href="#">Newsletter</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact Us</h4>
+      <ul>
+        <li><a href="#">📞 01234 567890</a></li>
+        <li><a href="#">✉️ info@greenleafgardens.co.uk</a></li>
+        <li><a href="#">📍 12 Garden Lane, Surrey</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 GreenLeaf Garden Supplies. All Rights Reserved.</span>
+    <span class="powered">Powered by OpenCart</span>
+  </div>
+</footer>
+
+</body>
+</html>
